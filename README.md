@@ -1,99 +1,283 @@
-# Python Template Repository
+[![Project Status: WIP – Initial development is in progress, but there has not yet been a stable, usable release suitable for the public.](https://www.repostatus.org/badges/latest/wip.svg)](https://www.repostatus.org/#wip)
+[![Build Status](https://travis-ci.org/adityavaishampayan/SFM_cpp.svg?branch=master)](https://github.com/adityavaishampayan/SFM_cpp)
+[![Coverage Status](https://coveralls.io/repos/github/adityavaishampayan/SFM_cpp/badge.svg?branch=master)](https://coveralls.io/github/adityavaishampayan/SFM_cpp?branch=master)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-This repository contains a fully-functionable package structure including (empty) tests.
 
-It's features include (but are not limited to):
-* An already working package structure
-* A working requirement handling
-* Minimal effort pypi releases
-* Pre-Configured CI/CD (With Travis)
-* Code coverage analysis
-* Python Code Style Checks
+## Introduction
 
-> If you want to add something to this repo, please submit a PR. Contributions are very welcome.
+In this project we reconstruct a 3D scene and simultaneously obtain the camera poses of a monocular camera w.r.t. the given scene. This procedure is known as Structure from Motion (SfM). As the name suggests, you are creating the entire rigid structure from a set of images with different view points (or equivalently a camera in motion).
 
-## Customize it!
+A few years ago, Agarwal et. al published Building Rome in a Day in which they reconstructed the entire city just by using a large collection of photos from the Internet.
 
-To customize this repo, you need to have a look at the following chapters.
+There are a few steps that collectively form SfM:
 
-### Directory-Name
-You might want to customize your package-name.
+  - Feature Matching and Outlier rejection using RANSAC
+  - Estimating Fundamental Matrix
+  - Estimating Essential Matrix from Fundamental Matrix
+  - Estimate Camera Pose from Essential Matrix
+  - Check for Cheirality Condition using Triangulation
+  - Perspective-n-Point
+     - Linear Camera Pose Estimation
+     - PnP RANSAC
+     - Nonlinear PnP
+  - Bundle Adjustment
+     - Visibility Matrix
 
-To do this, you simply have to rename the `template-repo` directory to whatever you want.
- > Make sure, to also change it in [line 37 of your setup.py](setup.py#L37), or you won't be able to install your package anymore!
+## Authors
+ - Aditya Vaishampayan
+ - Amrish Baskaran
 
-### Python Package Metadata
+## License
+License file can be found [here](https://github.com/adityavaishampayan/SFM_cpp/blob/master/LICENSE)
 
-To customize your python package, you just have to change your `setup.py`.
-
-Currently the important part looks like 
-```python
-setup(
-    name='template_package',
-    version=_version,
-    packages=find_packages(),
-    url='https://github.com/justusschock/template-repo-python',
-    test_suite="unittest",
-    long_description=readme,
-    long_description_content_type='text/markdown',
-    install_requires=requirements,
-    tests_require=["coverage"],
-    python_requires=">=3.5",
-    author="Justus Schock",
-    author_email="justus.schock@rwth-aachen.de",
-    license=license,
-)
 ```
-This includes the default information for me and must be adjusted to your needs:
+MIT License
 
-* `name` provides the package-name you can later import
-* `version` provides the package-version (which will currently be extracted from your package's `__init__.py`, but be also set manually)
-* `packages` is a list defining all packages (and their sub-packages and the sub-packages of their sub-packages and so on...), that should be installed. This is automatically extracted by `find_packages`, which also accepts some sub-packages to ignore (besides some other arguments).
-`url` specifies the packages homepage (in this case the current GitHub repo); You might want to change it to your repos homepage.
-* `test_suite` defines the test-suite to use for your unittests. In this repo template, we'll python's built-in framework `unittest`, but you can change this too; *Just make sure to also change this, when we get to CI/CD.*
-* `long_description` does what it sayes: It provides a long description of your package. Currently this is parsed from your `README.md`
-* `long_description_content_type` defines your description type; I set it to markdown in most cases
-* `install_requires` is a list containing all your package requirements. They are automatically parsed from a `requirements.txt` file
-* `tests_require` does the same thing for your unittests.
-* `python_requires` specifies the python version, your package can be installed to (here it's been set to python 3.5 or above, since this is what I usually use). *Depending on the version you specify here, you might not be able to use all of python's latest features*
-* `author` and `author_email` specify who you are.
-* `license` specifies the license you want to release your code with. This is parsed from a `LICENSE` file.
+Copyright (c) 2018 Aditya Vaishampayan, Amrish Bhaskaran
 
-There are still many other options to include here, but these are the most basic ones.
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
 
-### Unittests
-If you want to add/change some unit-tests, you should do this in a new python file starting with `test_`. [Here](https://docs.python.org/3/library/unittest.html) is a good introduction on how to write unittests with the `unittest` framework. After you added these tests, you may run them with either `coverage run -m unittest`or `python -m unittest`.
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
 
-They are basically doing the same, but `coverage` additionally checks, how many of your code-lines are currently covered by your tests.
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+```
 
-The unittests are also automatically triggered within [CI/CD](#cicd)
+## Development Process
+This module will be developed using the Solo Iterative Process(SIP), Test Driven Development and agile development in a 3 week sprint method.
+The spreadsheet for the Product log, iteration backlog, work log and sprint details can be found in this link-[Agile Development Spreadsheet](https://docs.google.com/spreadsheets/d/1gTq1l9RCe6zuMW0L57cpaaCt8EEMOVuNtgeplXd2HEI/edit?usp=sharing)
 
-### Specifying Codecov
-The [`.codecov.yml`](.codecov.yml) file specifies, how coverage should behave, how to calculate the coverage (i.e. what files to include for line counting) etc. 
+Notes from the sprint review sessions can be found in the link-[Sprint review Doc](https://docs.google.com/document/d/1T2uCC2Ef_-l1TtSUzq2ocHxJed9Jsc1g0zjSTBZt-sQ/edit?usp=sharing)
 
-### Requirements
-If you want to add new requirements, simply add them to the [`requirements.txt`](requirements/install.txt) file.
 
-### Packaging on PyPi
-If you plan to release your package on pypi, ship wheels for it, you might need the [`MANSIFEST.in`](MANIFEST.in) file, since it specifies (among other things), which files to include to your binaries.
+## Structure
+``` text
+.
+├── app
+│   └── main.cpp
+├── cmake
+│   ├── CodeCoverage.cmake
+│   ├── Colors.cmake
+│   ├── ConfigSafeGuards.cmake
+│   ├── Doctest.cmake
+│   ├── Documentation.cmake
+│   ├── LTO.cmake
+│   ├── Misc.cmake
+│   └── Warnings.cmake
+├── CMakeLists.txt
+├── Doxyfile.in
+├── include
+│   ├── exampleConfig.h.in
+│   └── example.h
+├── LICENSE
+├── README.md
+├── setup.sh
+├── src
+│   └── example.cpp
+└── tests
+    ├── CMakeLists.txt
+    ├── dummy.cpp
+    └── main.cpp
 
-### Setup.cfg
-The [`setup.cfg`](setup.cfg) file currently only specifies, which directories to exclude from style checking.
+```
 
-### Gitignore
-The `.gitignore` file is a real life saver. It prevents files and directories that match certain patterns from being added to your git repository, when you push new stuff to it. You may append more specific patterns here.
+Sources go in [src/](src/), header files in [include/](include/), main programs in [app/](app), and
+tests go in [tests/](tests/) (compiled to `unit_tests` by default).
 
-### CI/CD
-Now, we talked a lot about CI/CD. This repository uses [`travis`](https://travis-ci.com) as CI/CD and per default simply runs tests and style checks for your code.
+If you add a new executable, say `app/hello.cpp`, you only need to add the following two lines to [CMakeLists.txt](CMakeLists.txt):
 
-To use this feature, you have to enable travis for your repository.
+``` cmake
+add_executable(main app/main.cpp)   # Name of exec. and location of file.
+target_link_libraries(main PRIVATE ${LIBRARY_NAME})  # Link the executable to lib built from src/*.cpp (if it uses it).
+```
 
-#### YAMl-Specifications
-The [`.travis.yml`](.travis.yml) file specifies the CI/CD behavior. Currently it only runs tests and style-checks  with Python 3.7 on Linux Xenial. You may also include additional cases to the test matrix or add deployment (e.g. deploying your docs to GitHub Pages or similar stuff).
+You can find the example source code that builds the `main` executable in [app/main.cpp](app/main.cpp) under the `Build` section in [CMakeLists.txt](CMakeLists.txt).
+If the executable you made does not use the library in [src/](src), then only the first line is needed.
 
-#### Scripts
-The scripts used b CI/CD to install the requirements and run your tests are lying at [`scripts/ci`](scripts/ci).
-The file names indicate pretty well, what tey're doing. Of course you can customize them too.
+## Dependencies
+Simple starter C++ project with:
 
-If you want Travis to automatically fix your code style where possible you have to add a github access token to travis, comment in the [lines 6-28](scripts/ci/run_style_checks.sh#L6-L28) and change the environment variable and the repository in [line 27](scripts/ci/run_style_checks.sh#L27).
+- OpenCV - (OpenCV uses a BSD license and hence can be used for production with modification to the code.)
+- googletest [Gtest](http://wiki.ros.org/gtest)
+- Travis CI [Documentation](https://docs.travis-ci.com/user/for-beginners/)
+- Coveralls [Documentation](https://docs.coveralls.io/about-coveralls)
 
+## OpenCV installation
+```
+Update packages
+sudo apt-get update
+sudo apt-get upgrade
+```
+We will install required dependencies
+```
+sudo apt-get install build-essential checkinstall cmake pkg-config yasm
+sudo apt-get install git gfortran
+sudo apt-get install libjpeg8-dev libjasper-dev libpng12-dev
+ ```
+If you are using Ubuntu 14.04
+```
+sudo apt-get install libtiff4-dev
+```
+If you are using Ubuntu 16.04
+```
+sudo apt-get install libtiff5-dev
+```
+
+```
+sudo apt-get install libavcodec-dev libavformat-dev libswscale-dev libdc1394-22-dev
+sudo apt-get install libxine2-dev libv4l-dev
+sudo apt-get install libgstreamer0.10-dev libgstreamer-plugins-base0.10-dev
+sudo apt-get install qt5-default libgtk2.0-dev libtbb-dev
+sudo apt-get install libatlas-base-dev
+sudo apt-get install libfaac-dev libmp3lame-dev libtheora-dev
+sudo apt-get install libvorbis-dev libxvidcore-dev
+sudo apt-get install libopencore-amrnb-dev libopencore-amrwb-dev
+sudo apt-get install x264 v4l-utils
+ ```
+Optional dependencies
+```
+sudo apt-get install libprotobuf-dev protobuf-compiler
+sudo apt-get install libgoogle-glog-dev libgflags-dev
+sudo apt-get install libgphoto2-dev libeigen3-dev libhdf5-dev doxygen
+```
+Clone OpenCV and OpenCV_contrib
+```
+git clone https://github.com/opencv/opencv.git
+cd opencv
+git checkout 3.3.1
+cd ..
+
+git clone https://github.com/opencv/opencv_contrib.git
+cd opencv_contrib
+git checkout 3.3.1
+cd ..
+```
+Make build directory
+```
+cd opencv
+mkdir build
+cd build
+```
+Run Cmake
+```
+cmake -D CMAKE_BUILD_TYPE=RELEASE \
+      -D CMAKE_INSTALL_PREFIX=/usr/local \
+      -D INSTALL_C_EXAMPLES=ON \
+      -D INSTALL_PYTHON_EXAMPLES=ON \
+      -D WITH_TBB=ON \
+      -D WITH_V4L=ON \
+      -D WITH_QT=ON \
+      -D WITH_OPENGL=ON \
+      -D OPENCV_EXTRA_MODULES_PATH=../../opencv_contrib/modules \
+      -D BUILD_EXAMPLES=ON ..
+```
+Find out number of CPU cores in your machine
+```
+nproc
+
+# substitute 4 by output of nproc
+make -j4
+sudo make install
+sudo sh -c 'echo "/usr/local/lib" >> /etc/ld.so.conf.d/opencv.conf'
+sudo ldconfig
+```
+For installation related issues.
+
+A complete OpenCV installation guide in Ubuntu can be found [here](http://www.codebind.com/cpp-tutorial/install-opencv-ubuntu-cpp/).
+
+
+## Running tests-
+Go to Catkin Workspace
+```
+cd ~/catkin_ws/
+catkin_make run_tests intelli_bot_test
+```
+
+## Building
+
+Build by making a build directory (i.e. `build/`), run `cmake` in that dir, and then use `make` to build the desired target.
+
+Example:
+
+``` bash
+> mkdir build && cd build
+> cmake .. -DCMAKE_BUILD_TYPE=[Debug | Coverage | Release]
+> make
+> ./main
+> make test      # Makes and runs the tests.
+> make coverage  # Generate a coverage report.
+> make doc       # Generate html documentation.
+```
+
+
+## Setup
+When starting a new project, you probably don't want the history of this repository. To start fresh you can use
+the [setup script](setup.sh) as follows:
+``` bash
+> git clone https://github.com/bsamseth/cpp-project  # Or use ssh-link if you like.
+> cd cpp-project
+> sh setup.sh
+```
+The result is a fresh Git repository with one commit adding all files from the boiler plate.
+
+## Doxygen Documentation
+
+The doxygen documentation can be generated manually using the following commands
+-
+
+Installation
+```
+sudo apt-get install doxygen
+sudo apt-get install doxygen-gui
+```
+Open Doxywizard and follow the instructions to generate the required files
+```
+doxywizard
+```
+Or one can also follow the steps given below:
+
+Doxygen Documentation generation steps:
+```
+cd <path to repository>
+mkdir Doxygen
+cd Doxygen
+doxygen -g <config_file_name>
+```
+
+Open configuration file and update the following:
+
+```
+PROJECT_NAME = 'your project name'
+INPUT = ../LaneDetector ../include ../test
+```
+
+Run and generate the documents by running the next command:
+```
+doxygen <config_file_name>
+```
+
+## Plugins
+
+- Google C++ Sytle
+
+    To include and use Google C++ Style formatter in Eclipse
+
+    1. In Eclipse, go to Window -> Preferences -> C/C++ -> Code Style -> Formatter.
+    Import [eclipse-cpp-google-style][reference-id-for-eclipse-cpp-google-style] and apply.
+
+    2. To use Google C++ style formatter, right click on the source code or folder in
+    Project Explorer and choose Source -> Format
+
+[reference-id-for-eclipse-cpp-google-style]: https://raw.githubusercontent.com/google/styleguide/gh-pages/eclipse-cpp-google-style.xml
