@@ -65,31 +65,48 @@ Notes from the sprint review sessions can be found in the link-[Sprint review Do
 ## Structure
 ``` text
 .
-├── app
-│   └── main.cpp
-├── cmake
-│   ├── CodeCoverage.cmake
-│   ├── Colors.cmake
-│   ├── ConfigSafeGuards.cmake
-│   ├── Doctest.cmake
-│   ├── Documentation.cmake
-│   ├── LTO.cmake
-│   ├── Misc.cmake
-│   └── Warnings.cmake
-├── CMakeLists.txt
-├── Doxyfile.in
-├── include
-│   ├── exampleConfig.h.in
-│   └── example.h
+├── Dataset
+│   ├── Data
+│   │   ├── 1.jpg
+│   │   ├── 2.jpg
+│   │   ├── 3.jpg
+│   │   ├── 4.jpg
+│   │   ├── 5.jpg
+│   │   ├── 6.jpg
+│   │   ├── calibration.txt
+│   │   ├── matching1.txt
+│   │   ├── matching2.txt
+│   │   ├── matching3.txt
+│   │   ├── matching4.txt
+│   │   └── matching5.txt
+│   └── Data.zip
 ├── LICENSE
 ├── README.md
-├── setup.sh
-├── src
-│   └── example.cpp
-└── tests
-    ├── CMakeLists.txt
-    ├── dummy.cpp
-    └── main.cpp
+├── requirements
+│   ├── requirements.txt
+│   └── unittests.txt
+├── scripts
+│   ├── BuildVisibilityMatrix.py
+│   ├── BundleAdjustment.py
+│   ├── configure.py
+│   ├── DisambiguateCameraPose.py
+│   ├── EssentialMatrixFromFundamentalMatrix.py
+│   ├── EstimateFundamentalMatrix.py
+│   ├── ExtractCameraPose.py
+│   ├── GetInliersRANSAC.py
+│   ├── LinearTriangulation.py
+│   ├── NonlinearPnP.py
+│   ├── NonlinearTriangulation.py
+│   ├── PnPRANSAC.py
+│   └── Wrapper.py
+├── setup.cfg
+├── setup.py
+├── tests
+│   └── __init__.py
+├── UML_diagrams
+│   ├── activity_diagram.png
+│   └── UML_ClassDiagram.pdf
+└── Wrapper.py
 
 ```
 
