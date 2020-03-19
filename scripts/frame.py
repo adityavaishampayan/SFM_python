@@ -24,7 +24,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 """
 
-## @file    frame.py
+# @file    frame.py
 # @Author  Amrish Baskaran (amrish1222)
 # @Author  Aditya Vaishampayan (adityavaishampayan)
 # @copyright  MIT
@@ -32,34 +32,35 @@ SOFTWARE.
 
 import numpy as np
 
+
 class Frame:
 
     # @brief Constructor for Class
     # @param  self- Object pointer
     # @return none
     def __init__(self, frameId):
-        self.__frameId = frameId;
+        self.__frameId = frameId
         self.__keyPts = []
         self.__descriptors = []
-        self.__currentR = np.zeros((3,3))
-        self.__currentT = np.zeros((3,1))
+        self.__currentR = np.zeros((3, 3))
+        self.__currentT = np.zeros((3, 1))
         self.__pts3d = []
-        
-    
+
     # @brief set the keypoint extracted by the detector
     # @param  self- Object pointer
     # @param  ptsList- List of np elements size(1,2)
     # @return none
+
     def setKeyPts(self, ptsList):
         self.__keyPts = ptsList
-    
+
     # @brief set the descriptors extracted by the detector corresponding to keypts
     # @param  self- Object pointer
     # @param  ptsList- List of np elements size(1,2)
     # @return none
     def setDescriptors(self, descriptorList):
         self.__descriptors = descriptorList
-        
+
     # @brief set the pose paramters
     # @param  self- Object pointer
     # @param  R- Rotation matrix
@@ -68,20 +69,20 @@ class Frame:
     def setPose(self, R, T):
         self.__currentR = R
         self.__currentT = T
-        
+
     # @brief set the 3D points associated with this camera Pose
     # @param  self- Object pointer
     # @param  ptsList- List of np elements size(1,3)
     # @return none
     def set3dPts(self, ptsList):
         self.__pts3d = ptsList
-    
+
     # @brief return the keypoints and descriptors
     # @param  self- Object pointer
     # @return __keyPts,__descriptors
     def getDetections(self):
         return self.__keyPts, self.__descriptors
-    
+
     # @brief return the pose associated with this pose
     # @param  self- Object pointer
     # @return __currentR, __currentT
