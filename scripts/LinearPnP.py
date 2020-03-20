@@ -35,13 +35,15 @@ import sys
 # noinspection PyBroadException
 try:
     sys.path.remove('/opt/ros/kinetic/lib/python2.7/dist-packages')
-except:
+except BaseException:
     pass
 
 # G
 
 
-def linear_pnp(correspondences_2d_3d: float, calibration_matrix: float) -> float:
+def linear_pnp(
+        correspondences_2d_3d: float,
+        calibration_matrix: float) -> float:
     """
     Given 2D-3D correspondences, X↔x and the intrinsic parameter K, estimate the camera pose using linear least squares
     :param correspondences_2d_3d: 2D to 3D point correspondences
@@ -49,4 +51,3 @@ def linear_pnp(correspondences_2d_3d: float, calibration_matrix: float) -> float
     :return: estimated camera pose using linear least square
     """
     ...
-
