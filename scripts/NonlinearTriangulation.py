@@ -35,11 +35,14 @@ import sys
 # noinspection PyBroadException
 try:
     sys.path.remove('/opt/ros/kinetic/lib/python2.7/dist-packages')
-except:
+except BaseException:
     pass
 
 
-def non_linear_triangulation(camera_pose1: float, camera_pose2: float, linear_triangulated_points: float) -> float:
+def non_linear_triangulation(
+        camera_pose1: float,
+        camera_pose2: float,
+        linear_triangulated_points: float) -> float:
     """
     Given two camera poses and linearly triangulated points, X, refine the locations of the 3D points that minimizes
     re-projection error
