@@ -35,7 +35,7 @@ import sys
 
 try:
     sys.path.remove('/opt/ros/kinetic/lib/python2.7/dist-packages')
-except:
+except BaseException:
     pass
 
 import cv2
@@ -63,5 +63,5 @@ K = np.array([[568.996140852, 0, 643.21055941],
               [0, 0, 1]])
 
 W = np.array([[0, -1, 0],
-              [1,  0, 0],
-              [0,  0, 1]])
+              [1, 0, 0],
+              [0, 0, 1]])
