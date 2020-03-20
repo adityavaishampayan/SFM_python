@@ -36,12 +36,16 @@ import sys
 # noinspection PyBroadException
 try:
     sys.path.remove('/opt/ros/kinetic/lib/python2.7/dist-packages')
-except:
+except BaseException:
     pass
 
 
-def disambiguate_camera_pose(camera_pose1: float, camera_pose2: float, camera_pose3: float, camera_pose4: float,
-                             triangulated_points: float) -> float:
+def disambiguate_camera_pose(
+        camera_pose1: float,
+        camera_pose2: float,
+        camera_pose3: float,
+        camera_pose4: float,
+        triangulated_points: float) -> float:
     """
     Given four camera pose configurations and their triangulated points return the unique camera pose by checking
     the cheirality condition
