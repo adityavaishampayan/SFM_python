@@ -39,7 +39,9 @@ except BaseException:
     pass
 
 
-def get_essential_matrix(fundamental_matrix: float, calibration_matrix: float) -> float:
+def get_essential_matrix(
+        fundamental_matrix: float,
+        calibration_matrix: float) -> float:
     """
     This function obtains an essential matrix from Fundamental matrix
     :param fundamental_matrix: 3x3 matrix with rank 2
