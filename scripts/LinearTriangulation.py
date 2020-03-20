@@ -35,11 +35,15 @@ import sys
 # noinspection PyBroadException
 try:
     sys.path.remove('/opt/ros/kinetic/lib/python2.7/dist-packages')
-except:
+except BaseException:
     pass
 
 
-def linear_triangulation(camera_pose1: float, camera_pose2: float, key_pts1: float, key_pts2: float) -> float:
+def linear_triangulation(
+        camera_pose1: float,
+        camera_pose2: float,
+        key_pts1: float,
+        key_pts2: float) -> float:
     """
     a function to estimate 3D points given camera poses and matching key point correspondences
     :param camera_pose1: (C1,R1)
