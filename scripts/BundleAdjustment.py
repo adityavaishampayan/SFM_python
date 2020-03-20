@@ -35,11 +35,13 @@ import sys
 # noinspection PyBroadException
 try:
     sys.path.remove('/opt/ros/kinetic/lib/python2.7/dist-packages')
-except:
+except BaseException:
     pass
 
 
-def bundle_adjustment(initialized_camera_poses: float, points_3d: float) -> float:
+def bundle_adjustment(
+        initialized_camera_poses: float,
+        points_3d: float) -> float:
     """
     Function to refine camera poses and 3D points by minimizing re-projection error
     :param initialized_camera_poses: camera poses obtained after building visibility matrix
