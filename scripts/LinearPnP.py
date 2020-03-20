@@ -24,11 +24,11 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 """
 
-# @file    NonlinearPnP.py
+# @file    LinearPnP.py
 # @Author  Aditya Vaishampayan (adityavaishampayan)
 # @Author  Amrish Baskaran (amrish1222)
 # @copyright  MIT
-# @brief  a function that refines the camera pose that minimizes reprojection error
+# @brief  a function that estimates the camera pose using linear least squares
 
 import sys
 
@@ -38,13 +38,16 @@ try:
 except BaseException:
     pass
 
+# G
 
-def non_linear_pnp(correspondences_2d_3d: float, camera_pose: float) -> float:
+
+def linear_pnp(
+        correspondences_2d_3d: float,
+        calibration_matrix: float) -> float:
     """
-    given 3D-2D correspondences, and linearly estimated camera pose, (C,R), refine the camera pose that minimizes
-    re-projection error
+    Given 2D-3D correspondences, X↔x and the intrinsic parameter K, estimate the camera pose using linear least squares
     :param correspondences_2d_3d: 2D to 3D point correspondences
-    :param camera_pose: linearly estimated camera pose (C,R)
-    :return: camera pose with minimized re-projection error
+    :param calibration_matrix: intrinsic matrix K
+    :return: estimated camera pose using linear least square
     """
     ...
