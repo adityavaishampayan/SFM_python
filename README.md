@@ -2,8 +2,7 @@
 [![Build Status](https://travis-ci.org/adityavaishampayan/SFM_python.svg?branch=master)](https://github.com/adityavaishampayan/SFM_python)
 [![Coverage Status](https://coveralls.io/repos/github/adityavaishampayan/SFM_cpp/badge.svg?branch=master)](https://coveralls.io/github/adityavaishampayan/SFM_cpp?branch=master)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-
-
+![Format python code](https://github.com/adityavaishampayan/SFM_python/workflows/Format%20python%20code/badge.svg)
 ## Introduction
 
 In this project we reconstruct a 3D scene and simultaneously obtain the camera poses of a monocular camera w.r.t. the given scene. This procedure is known as Structure from Motion (SfM). As the name suggests, you are creating the entire rigid structure from a set of images with different view points (or equivalently a camera in motion).

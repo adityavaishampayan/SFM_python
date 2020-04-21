@@ -32,7 +32,7 @@ SOFTWARE.
 
 
 import sys
-
+import numpy as np
 # noinspection PyBroadException
 try:
     sys.path.remove('/opt/ros/kinetic/lib/python2.7/dist-packages')
@@ -47,4 +47,5 @@ def get_fundamental_matrix(key_pts1: float, key_pts2: float) -> float:
     :param key_pts2: another set of Keypoints from second image
     :return: Fundamental Matrix
     """
+
     ...
