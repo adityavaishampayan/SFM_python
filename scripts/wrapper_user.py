@@ -31,6 +31,8 @@ SOFTWARE.
 # @brief  Full pipeline of structure from motion using user functions
 from scripts.ransac_eight_point import ransac_eight_points
 from scripts.EssentialMatrixFromFundamentalMatrix import get_essential_matrix
+from scripts.ExtractCameraPose import extract_camera_pose
+from scripts.LinearTriangulation import LinearTriangulation
 
 import sys
 
@@ -82,7 +84,24 @@ BF = ransac_eight_points(joint_list)
 
 E = get_essential_matrix(BF, K)
 
+#print(E)
 
+R_set,C_set = extract_camera_pose(E,W)
+
+# print("rset", R_set)
+# print("cset", C_set)
+
+X_set = []
+color = ['r', 'g', 'b', 'k']
+
+for n in range(0, 4):
+    X1 = LinearTriangulation(K, np.zeros((3, 1)), np.identity(3),
+                             C_set[n].T, R_set[n], np.float32(list1),
+                             np.float32(list2))
+    X_set.append(X1)
+
+
+print(X_set)
 #
 # cv2.imshow("res1",res1)
 # cv2.imshow("res2",res2)
