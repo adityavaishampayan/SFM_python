@@ -76,23 +76,30 @@ print("kp4 ",kp4)
 print("kp5 ",kp5)
 print("kp6 ",kp6)
 
-list1 = []
-list2 = []
+import pickle
 
-for pair in kp6:
-    list1.append((int(float(pair[0][0])),int(float(pair[0][1]))))
-    list2.append((int(float(pair[1][0])),int(float(pair[1][1]))))
+with open('matches5_6.data', 'wb') as filehandle:
+    # store the data as binary data stream
+    pickle.dump(kp6, filehandle)
 
-img5 = cv2.imread("5.jpg")
-img6 = cv2.imread("6.jpg")
 
-for i in list1:
-    res1 = cv2.circle(img5, i, 2, (0, 0, 255), -1)
-
-for i in list2:
-    res2 = cv2.circle(img6, i, 2, (0, 0, 255), -1)
-    
-cv2.imshow("res1",res1)
-cv2.imshow("res2",res2)
-cv2.waitKey(0)
-cv2.destroyAllWindows()
+# list1 = []
+# list2 = []
+#
+# for pair in kp6:
+#     list1.append((int(float(pair[0][0])),int(float(pair[0][1]))))
+#     list2.append((int(float(pair[1][0])),int(float(pair[1][1]))))
+#
+# img5 = cv2.imread("5.jpg")
+# img6 = cv2.imread("6.jpg")
+#
+# for i in list1:
+#     res1 = cv2.circle(img5, i, 2, (0, 0, 255), -1)
+#
+# for i in list2:
+#     res2 = cv2.circle(img6, i, 2, (0, 0, 255), -1)
+#
+# cv2.imshow("res1",res1)
+# cv2.imshow("res2",res2)
+# cv2.waitKey(0)
+# cv2.destroyAllWindows()
