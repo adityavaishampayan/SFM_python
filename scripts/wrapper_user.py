@@ -29,6 +29,7 @@ SOFTWARE.
 # @Author  Amrish Baskaran (amrish1222)
 # @copyright  MIT
 # @brief  Full pipeline of structure from motion using user functions
+from scripts.ransac_eight_point import ransac_eight_points
 
 import sys
 
@@ -58,8 +59,6 @@ W = np.array([[0, -1, 0],
               [1, 0, 0],
               [0, 0, 1]])
 
-print(matches1_2)
-
 list1 = []
 list2 = []
 
@@ -76,9 +75,15 @@ for i in list1:
 for i in list2:
     res2 = cv2.circle(img2, i, 2, (0, 0, 255), -1)
 
-cv2.imshow("res1",res1)
-cv2.imshow("res2",res2)
-cv2.waitKey(0)
-cv2.destroyAllWindows()
+joint_list = zip(list1, list2)
+
+BF, inliers = ransac_eight_points(joint_list)
+
+
+#
+# cv2.imshow("res1",res1)
+# cv2.imshow("res2",res2)
+# cv2.waitKey(0)
+# cv2.destroyAllWindows()
 
 #BF, inliers = ransac_eight_points(jointlist)

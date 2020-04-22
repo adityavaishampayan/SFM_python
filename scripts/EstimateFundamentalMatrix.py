@@ -33,6 +33,7 @@ SOFTWARE.
 
 import sys
 import numpy as np
+
 # noinspection PyBroadException
 try:
     sys.path.remove('/opt/ros/kinetic/lib/python2.7/dist-packages')
@@ -47,5 +48,26 @@ def get_fundamental_matrix(key_pts1: float, key_pts2: float) -> float:
     :param key_pts2: another set of Keypoints from second image
     :return: Fundamental Matrix
     """
+    n = key_pts1.shape[1]
+    A = np.zeros((n, 9))
+    for i in range(n):
+        A[i] = [key_pts1[0, i] * key_pts2[0, i],
+                key_pts1[0, i] * key_pts2[1, i],
+                key_pts1[0, i],
+                key_pts1[1, i] * key_pts2[0, i],
+                key_pts1[1, i] * key_pts2[1, i],
+                key_pts1[1, i],
+                key_pts2[0, i],
+                key_pts2[1, i],
+                1]
 
-    ...
+    U, S, V = np.linalg.svd(A)
+    F = V[-1].reshape(3, 3)
+
+    U, S, V = np.linalg.svd(F)
+
+    S[2] = 0
+
+    F = np.dot(U, np.dot(np.diag(S), V))
+
+    return F

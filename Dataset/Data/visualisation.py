@@ -83,13 +83,13 @@ with open('matches5_6.data', 'wb') as filehandle:
     pickle.dump(kp6, filehandle)
 
 
-# list1 = []
-# list2 = []
-#
-# for pair in kp6:
-#     list1.append((int(float(pair[0][0])),int(float(pair[0][1]))))
-#     list2.append((int(float(pair[1][0])),int(float(pair[1][1]))))
-#
+list1 = []
+list2 = []
+
+for pair in kp6:
+    list1.append((int(float(pair[0][0])),int(float(pair[0][1]))))
+    list2.append((int(float(pair[1][0])),int(float(pair[1][1]))))
+
 # img5 = cv2.imread("5.jpg")
 # img6 = cv2.imread("6.jpg")
 #

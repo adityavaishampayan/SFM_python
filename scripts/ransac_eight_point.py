@@ -30,6 +30,10 @@ SOFTWARE.
 # @copyright  MIT
 # @brief  Estimates the inliers and fundamental matrix using Zhang's 8 point algorithm.
 
+import numpy as np
+import random
+from scripts.EstimateFundamentalMatrix import get_fundamental_matrix
+
 
 def ransac_eight_points(kpts_match):
     grid1 = [[[], [], [], [], [], [], [], []],
@@ -44,10 +48,17 @@ def ransac_eight_points(kpts_match):
     resolution_X = 160
     resolution_Y = 120
 
-    for index, kpts1, kpts2 in kpts_match:
+    for kpts1, kpts2 in kpts_match:
+        #print("kpts1: ",kpts1)
+        #print("kpts2: ",kpts2)
+
         x_cell = int(kpts1[0] / resolution_X)
+        #print("x_cell: ",x_cell)
         y_cell = int(kpts1[1] / resolution_Y)
+        #print("y_cell: ",y_cell)
         grid1[x_cell][y_cell].append((kpts1[0], kpts1[1], kpts2[0], kpts1[1]))
+
+    #print("grid1: ",grid1)
 
     best_inliers = np.array([])
     non_empty_cells = []
@@ -59,11 +70,15 @@ def ransac_eight_points(kpts_match):
             if len(grid1[i][j]) != 0:
                 non_empty_cells.append(grid1[i][j])
 
+    #print("non_empty_cells: ",non_empty_cells)
+
     while (count <= 100):
 
         eight_points = []
 
         eight_cells = random.sample(non_empty_cells, k=8)
+
+        #print("eight_cells: ",eight_cells)
 
         # obtaining eight points list1
         for cell in eight_cells:
@@ -79,11 +94,19 @@ def ransac_eight_points(kpts_match):
         points_img1 = np.array(points_img1)
         points_img2 = np.array(points_img2)
 
-        F = getFundamentalMatrix(points_img1.T, points_img2.T)
+        # print("points_img1: ", points_img1)
+        # print("points_img2: ", points_img2)
+
+
+        F = get_fundamental_matrix(points_img1.T, points_img2.T)
+
+        #print("F: ",F)
 
         inliers = []
 
-        for index, kpts1, kpts2 in kpts_match:
+        #print("before entering")
+        for kpts1, kpts2 in kpts_match:
+            print("after entering")
 
             x_1 = kpts1[0]
             y_1 = kpts1[1]
@@ -92,11 +115,12 @@ def ransac_eight_points(kpts_match):
 
             d1 = np.dot(F, np.array([x_1, y_1, 1]))
             d2 = np.dot(F.T, np.array([x_1, y_1, 1]))
-            error = np.linalg.norm(np.abs(np.dot(np.array([x_2, y_2, 1]).T, d1))) / np.sqrt(
-                np.dot(d1.T, d1) + np.dot(d2.T, d2))
-
+            error = np.linalg.norm(np.abs(np.dot(np.array([x_2, y_2, 1]).T, d1))) / np.sqrt(np.dot(d1.T, d1) + np.dot(d2.T, d2))
+            print("error: ", error)
             if error <= 0.5:
                 inliers.append((x_1, y_1, x_2, y_2))
+
+        #print("inliers: ",len(inliers))
 
         if len(inliers) > len(best_inliers):
             best_inliers = np.array([])
