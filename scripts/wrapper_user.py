@@ -30,6 +30,7 @@ SOFTWARE.
 # @copyright  MIT
 # @brief  Full pipeline of structure from motion using user functions
 from scripts.ransac_eight_point import ransac_eight_points
+from scripts.EssentialMatrixFromFundamentalMatrix import get_essential_matrix
 
 import sys
 
@@ -77,7 +78,9 @@ for i in list2:
 
 joint_list = zip(list1, list2)
 
-BF, inliers = ransac_eight_points(joint_list)
+BF = ransac_eight_points(joint_list)
+
+E = get_essential_matrix(BF, K)
 
 
 #

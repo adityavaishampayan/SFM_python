@@ -31,6 +31,7 @@ SOFTWARE.
 # @brief  essential matrix E=K.T*F*K
 
 import sys
+import numpy as np
 
 # noinspection PyBroadException
 try:
@@ -48,4 +49,13 @@ def get_essential_matrix(
     :param calibration_matrix: 3x3 camera matrix with camera calibration parameters
     :return: 3x3 matrix essential matrix E=K.T*F*K
     """
-    ...
+    K = calibration_matrix
+    F = fundamental_matrix
+
+    E = np.dot(K.T, np.dot(F, K))
+
+    U, S, V = np.linalg.svd(E)
+
+    E = np.dot(U, np.dot(np.diag([1, 1, 0]), V))
+
+    return E

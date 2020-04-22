@@ -72,62 +72,86 @@ def ransac_eight_points(kpts_match):
 
     #print("non_empty_cells: ",non_empty_cells)
 
-    while (count <= 100):
+    eight_points = []
 
-        eight_points = []
+    eight_cells = random.sample(non_empty_cells, k=8)
 
-        eight_cells = random.sample(non_empty_cells, k=8)
+    # print("eight_cells: ",eight_cells)
 
-        #print("eight_cells: ",eight_cells)
+    # obtaining eight points list1
+    for cell in eight_cells:
+        a = random.choice(cell)
+        eight_points.append(a)
 
-        # obtaining eight points list1
-        for cell in eight_cells:
-            a = random.choice(cell)
-            eight_points.append(a)
+    points_img1 = []
+    points_img2 = []
+    for x1, y1, x2, y2 in eight_points:
+        points_img1.append((x1, y1))
+        points_img2.append((x2, y2))
 
-        points_img1 = []
-        points_img2 = []
-        for x1, y1, x2, y2 in eight_points:
-            points_img1.append((x1, y1))
-            points_img2.append((x2, y2))
+    points_img1 = np.array(points_img1)
+    points_img2 = np.array(points_img2)
 
-        points_img1 = np.array(points_img1)
-        points_img2 = np.array(points_img2)
+    # print("points_img1: ", points_img1)
+    # print("points_img2: ", points_img2)
 
-        # print("points_img1: ", points_img1)
-        # print("points_img2: ", points_img2)
+    F = get_fundamental_matrix(points_img1.T, points_img2.T)
 
+    # bypassing the RANSAC algorithm temporarily because all the corresponding points taken are inliers
+    # while (count <= 100):
+    #
+    #     eight_points = []
+    #
+    #     eight_cells = random.sample(non_empty_cells, k=8)
+    #
+    #     #print("eight_cells: ",eight_cells)
+    #
+    #     # obtaining eight points list1
+    #     for cell in eight_cells:
+    #         a = random.choice(cell)
+    #         eight_points.append(a)
+    #
+    #     points_img1 = []
+    #     points_img2 = []
+    #     for x1, y1, x2, y2 in eight_points:
+    #         points_img1.append((x1, y1))
+    #         points_img2.append((x2, y2))
+    #
+    #     points_img1 = np.array(points_img1)
+    #     points_img2 = np.array(points_img2)
+    #
+    #     # print("points_img1: ", points_img1)
+    #     # print("points_img2: ", points_img2)
+    #
+    #     F = get_fundamental_matrix(points_img1.T, points_img2.T)
+    #
+    #     print("F: ",F)
+    #
+    #     inliers = []
+    #
+    #     for kpts1, kpts2 in kpts_match:
+    #         print("after entering")
+    #
+    #         x_1 = kpts1[0]
+    #         y_1 = kpts1[1]
+    #         x_2 = kpts2[0]
+    #         y_2 = kpts2[1]
+    #
+    #         d1 = np.dot(F, np.array([x_1, y_1, 1]))
+    #         d2 = np.dot(F.T, np.array([x_1, y_1, 1]))
+    #         error = np.linalg.norm(np.abs(np.dot(np.array([x_2, y_2, 1]).T, d1))) / np.sqrt(np.dot(d1.T, d1) + np.dot(d2.T, d2))
+    #         print("error: ", error)
+    #         # if error <= 0.5:
+    #         #     inliers.append((x_1, y_1, x_2, y_2))
+    #         inliers.append((x_1, y_1, x_2, y_2))
+    #
+    #
+    #     if len(inliers) > len(best_inliers):
+    #         best_inliers = np.array([])
+    #         best_F = np.array([])
+    #         best_inliers = np.array(inliers)
+    #         best_F = F
+    #
+    #     count += 1
 
-        F = get_fundamental_matrix(points_img1.T, points_img2.T)
-
-        #print("F: ",F)
-
-        inliers = []
-
-        #print("before entering")
-        for kpts1, kpts2 in kpts_match:
-            print("after entering")
-
-            x_1 = kpts1[0]
-            y_1 = kpts1[1]
-            x_2 = kpts2[0]
-            y_2 = kpts2[1]
-
-            d1 = np.dot(F, np.array([x_1, y_1, 1]))
-            d2 = np.dot(F.T, np.array([x_1, y_1, 1]))
-            error = np.linalg.norm(np.abs(np.dot(np.array([x_2, y_2, 1]).T, d1))) / np.sqrt(np.dot(d1.T, d1) + np.dot(d2.T, d2))
-            print("error: ", error)
-            if error <= 0.5:
-                inliers.append((x_1, y_1, x_2, y_2))
-
-        #print("inliers: ",len(inliers))
-
-        if len(inliers) > len(best_inliers):
-            best_inliers = np.array([])
-            best_F = np.array([])
-            best_inliers = np.array(inliers)
-            best_F = F
-
-        count += 1
-
-    return best_F, best_inliers
+    return F
