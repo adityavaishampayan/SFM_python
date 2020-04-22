@@ -33,6 +33,7 @@ from scripts.ransac_eight_point import ransac_eight_points
 from scripts.EssentialMatrixFromFundamentalMatrix import get_essential_matrix
 from scripts.ExtractCameraPose import extract_camera_pose
 from scripts.LinearTriangulation import LinearTriangulation
+from scripts.DisambiguateCameraPose import DisambiguateCameraPose
 
 import sys
 
@@ -45,6 +46,7 @@ except :
 import cv2
 import numpy as np
 import matplotlib.pyplot as plt
+from mpl_toolkits.mplot3d import Axes3D
 import random
 import math
 import pickle
@@ -100,8 +102,39 @@ for n in range(0, 4):
                              np.float32(list2))
     X_set.append(X1)
 
+X, R, C = DisambiguateCameraPose(C_set, R_set, X_set)
 
-print(X_set)
+print(X)
+
+fig = plt.figure()
+ax = fig.add_subplot(111, projection='3d')
+
+x_values = []
+y_values = []
+z_values = []
+
+for i in X_set:
+    x_values.append(X_set[0])
+    y_values.append(X_set[1])
+    z_values.append(X_set[2])
+
+ax.scatter(x_values, z_values, c='r', marker='o')
+ax.set_xlabel('X Label')
+ax.set_ylabel('Y Label')
+ax.set_zlabel('Z Label')
+plt.show()
+
+# plt.scatter(X[:, 0], X[:, 2], c='r', s=4)
+# ax = plt.gca()
+# ax.set_xlabel('x')
+# ax.set_ylabel('y')
+#
+# ax.set_xlim([-0.5, 0.5])
+# ax.set_ylim([-0.1, 2])
+#
+# plt.show()
+
+
 #
 # cv2.imshow("res1",res1)
 # cv2.imshow("res2",res2)

@@ -32,6 +32,7 @@ SOFTWARE.
 # the cheirality condition
 
 import sys
+import numpy as np
 
 # noinspection PyBroadException
 try:
@@ -40,20 +41,29 @@ except BaseException:
     pass
 
 
-def disambiguate_camera_pose(
-        camera_pose1: float,
-        camera_pose2: float,
-        camera_pose3: float,
-        camera_pose4: float,
-        triangulated_points: float) -> float:
+def DisambiguateCameraPose(Cset, Rset, Xset):
+    """ Function to implement camera pose correction
+    Args:
+        Cset (TYPE): Set of calculated camera poses
+        Rset (TYPE): Set of calculated Rotation matrices
+        Xset (TYPE): 3D points
+    Returns:
+        TYPE: Corrected X, R_set, C_set
     """
-    Given four camera pose configurations and their triangulated points return the unique camera pose by checking
-    the cheirality condition
-    :param camera_pose1: (C1,R1)
-    :param camera_pose2: (C2,R2)
-    :param camera_pose3: (C3,R3)
-    :param camera_pose4: (C4,R4)
-    :param triangulated_points: triangulated points obtained from linear triangulation
-    :return: Unique camera pose
-    """
-    ...
+    best = 0
+    for i in range(4):
+
+        #         Cset[i] = np.reshape(Cset[i],(-1,-1))
+        N = Xset[i].shape[0]
+        n = 0
+        for j in range(N):
+            if ((np.dot(Rset[i][2, :], (Xset[i][j, :] - Cset[i])) > 0)
+                    and Xset[i][j, 2] >= 0):
+                n = n + 1
+        if n > best:
+            C = Cset[i]
+            R = Rset[i]
+            X = Xset[i]
+            best = n
+
+    return X, R, C
