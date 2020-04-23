@@ -51,14 +51,14 @@ def get_fundamental_matrix(key_pts1: float, key_pts2: float) -> float:
     n = key_pts1.shape[1]
     A = np.zeros((n, 9))
     for i in range(n):
-        A[i] = [key_pts1[0, i] * key_pts2[0, i],
-                key_pts1[0, i] * key_pts2[1, i],
-                key_pts1[0, i],
-                key_pts1[1, i] * key_pts2[0, i],
-                key_pts1[1, i] * key_pts2[1, i],
-                key_pts1[1, i],
-                key_pts2[0, i],
-                key_pts2[1, i],
+        A[i] = [key_pts1[i, 0] * key_pts2[i, 0],
+                key_pts1[i, 0] * key_pts2[i, 1],
+                key_pts1[i, 0],
+                key_pts1[i, 1] * key_pts2[i, 0],
+                key_pts1[i, 1] * key_pts2[i, 1],
+                key_pts1[i, 1],
+                key_pts2[i, 0],
+                key_pts2[i, 1],
                 1]
 
     U, S, V = np.linalg.svd(A)
@@ -69,5 +69,6 @@ def get_fundamental_matrix(key_pts1: float, key_pts2: float) -> float:
     S[2] = 0
 
     F = np.dot(U, np.dot(np.diag(S), V))
-
+    
+    F = F/ F[2,2]
     return F
