@@ -3,7 +3,7 @@
 """
 MIT License
 
-Copyright (c) 2018 Aditya Vaishampayan, Amrish Bhaskaran
+Copyright (c) 2018 Aditya Vaishampayan
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -26,7 +26,6 @@ SOFTWARE.
 
 # @file    GetInlierRANSANC.py
 # @Author  Aditya Vaishampayan (adityavaishampayan)
-# @Author  Amrish Baskaran (amrish1222)
 # @copyright  MIT
 # @brief  a function that estimates inlier correspondences using fundamental matrix based RANSAC.
 
@@ -38,15 +37,48 @@ try:
 except BaseException:
     pass
 
-from scripts.EstimateFundamentalMatrix import *
+import numpy as np
+from EstimateFundamentalMatrix import EstimateFundamentalMatrix
+import sys
+
+sys.dont_write_bytecode = True
 
 
-def get_inliers_ransac(key_pts1: float, key_pts2: float) -> float:
+def GetInliersRANSAC(kpts1_matches, kpts2_matches, indices):
     """
     function to implement ransac for outlier rejection on key point matches and then obtaining refined Fundamental
     matrix
-    :param key_pts1: one set of Keypoints from one image
-    :param key_pts2: second set of Keypoints from second image
-    :return: refined Fundamental Matrix
+    :param kpts1_matches: one set of Keypoints from one image
+    :param kpts2_matches: second set of Keypoints from second image
+    :param indices: indices of the corresponding keypoints
+    :return: refined Fundamental Matrix, inliers and their corresponding indices
     """
-    ...
+
+    num_of_matches = kpts1_matches.shape[0]
+    Best_count = 0
+
+    for iter in range(500):
+
+        sampled_idx = np.random.randint(0, num_of_matches, size=8)
+        ind = []
+        in_a = []
+        in_b = []
+        F = EstimateFundamentalMatrix(kpts1_matches[sampled_idx, :], kpts2_matches[sampled_idx, :])
+        new_set_inlier_count = 0
+
+        for i in range(num_of_matches):
+            error_1 = np.dot(np.append(kpts1_matches[i, :], 1), F.T)
+            if abs(np.dot(error_1, np.append(kpts2_matches[i, :], 1).T)) < 0.005:
+                in_a.append(kpts1_matches[i, :])
+                in_b.append(kpts2_matches[i, :])
+                ind.append(indices[i])
+                new_set_inlier_count += 1
+
+        if new_set_inlier_count > Best_count:
+            Best_count = new_set_inlier_count
+            best_F = F
+            best_inliers_a = in_a
+            best_inliers_b = in_b
+            inlier_index = ind
+
+    return best_F, np.array(best_inliers_a), np.array(best_inliers_b), np.array(inlier_index)

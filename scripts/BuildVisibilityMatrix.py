@@ -3,7 +3,7 @@
 """
 MIT License
 
-Copyright (c) 2018 Aditya Vaishampayan, Amrish Bhaskaran
+Copyright (c) 2020 Aditya Vaishampayan
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -24,9 +24,8 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 """
 
-# @file    BuildVisibilityMatrix.py
+# @file    visibikity_matrx.py
 # @Author  Aditya Vaishampayan (adityavaishampayan)
-# @Author  Amrish Baskaran (amrish1222)
 # @copyright  MIT
 # @brief Find the relationship between a camera and point, construct a I×J binary matrix
 
@@ -39,11 +38,12 @@ except BaseException:
     pass
 
 
-def build_visibility_matrix(points_3d: float, camera_pose: float) -> float:
+def visibikity_matrx(Visibility, r_indx):
     """
     method to find the relationship between a camera and point
-    :param points_3d: 3D points obtained after non-linear Pnp refinement
-    :param camera_pose: (C,R)
+    :param Visibility:
+    :param r_indx:
+    :param print_enable:
     :return: I×J binary matrix, V where Vij is one if the jth point is visible from the ith camera and zero otherwise
     """
-    ...
+    return Visibility[:, r_indx]

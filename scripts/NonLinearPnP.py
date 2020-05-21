@@ -3,7 +3,7 @@
 """
 MIT License
 
-Copyright (c) 2018 Aditya Vaishampayan
+Copyright (c) 2020 Aditya Vaishampayan
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -24,11 +24,11 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 """
 
-# @file    disambguate_camera_pose.py
+# @file    Linear Triangulation.py
 # @Author  Aditya Vaishampayan (adityavaishampayan)
 # @copyright  MIT
-# @brief  Given four camera pose configurations and their triangulated points return the unique camera pose by checking
-# the cheirality condition
+# @brief  a function that refines the camera pose that minimizes reprojection error
+
 
 import sys
 import numpy as np
@@ -39,35 +39,34 @@ try:
 except BaseException:
     pass
 
+import numpy as np
+import scipy.optimize as opt
+from scipy.spatial.transform import Rotation as Rscipy
 
-def disambguate_camera_pose(c_set, r_set, x_set):
+
+def reprojError(CQ, K, X, x):
     """
-    for correcting the camera pose
-    :param c_set: pre_calculated camera poses
-    :param r_set: pre_calculated rotation matrices
-    :param x_set: a set of 3d points
-    :return: corrected sets of the above 3
+    calculating the reprojection error
+    :param K: calibration matrix
+    :param X: 3d poiints
+    :param x: 2d points
+    :return: reprojection error
     """
 
-    best = 0
-    for i in range(4):
+    X = np.hstack((X, np.ones((X.shape[0], 1))))
 
-        n = 0
+    P = np.dot(np.dot(K, (Rscipy.from_quat([CQ[3:7][0], CQ[3:7][1], CQ[3:7][2], CQ[3:7][3]])).as_dcm()), np.hstack((np.identity(3), -CQ[0:3].reshape(-1, 1))))
 
-        alpha = np.dot(r_set[i][2, :])
+    e = x[:, 0] - (np.dot(P[0, :], X.T)).T / (np.dot(P[2, :], X.T)).T + x[:, 1] - (np.dot(P[1, :], X.T)).T / (np.dot(P[2, :], X.T)).T
 
-        beta = x_set[i][j, :] - c_set[i]
+    return sum(e)
 
-        gamma = x_set[i][j, 2]
 
-        for j in range(x_set[i].shape[0]):
-            if (((alpha, beta) > 0) and gamma >= 0):
-                n = n + 1
+def NonLinearPnP(X, x, K, C0, R0):
 
-        if n > best:
-            C = c_set[i]
-            R = r_set[i]
-            X = x_set[i]
-            best = n
+    optimized_param = opt.least_squares(
+        fun=reprojError, method="dogbox", x0=[C0[0], C0[1], C0[2], ((Rscipy.from_dcm(R0)).as_quat())[0], ((Rscipy.from_dcm(R0)).as_quat())[1], ((Rscipy.from_dcm(R0)).as_quat())[2], ((Rscipy.from_dcm(R0)).as_quat())[3]], args=[K, X, x])
+    Cnew = optimized_param.x[0:3]
+    Rnew = (Rscipy.from_quat([(optimized_param.x[3:7])[0], (optimized_param.x[3:7])[1], (optimized_param.x[3:7])[2], (optimized_param.x[3:7])[3]])).as_dcm()
 
-    return X, R, C
+    return Cnew, Rnew

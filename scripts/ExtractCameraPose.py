@@ -3,7 +3,7 @@
 """
 MIT License
 
-Copyright (c) 2018 Aditya Vaishampayan, Amrish Bhaskaran
+Copyright (c) 2020 Aditya Vaishampayan
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -26,7 +26,6 @@ SOFTWARE.
 
 # @file    ExtractCameraPose.py
 # @Author  Aditya Vaishampayan (adityavaishampayan)
-# @Author  Amrish Baskaran (amrish1222)
 # @copyright  MIT
 # @brief  Estimate Camera Pose from Essential Matrix
 
@@ -41,25 +40,38 @@ except BaseException:
     pass
 
 
-def extract_camera_pose(essential_matrix: float, w_matrix: int) -> float:
+K = np.array([[568.996140852,              0,   643.21055941],
+              [0,              568.988362396,  477.982801038],
+              [0,                          0,              1]])
+
+
+def extract_cam_pose(E, K):
     """
     function to obtain Rotation and Translation
     :param essential_matrix: a 3x3 matrix
     :param w_matrix: a 3x3 matrix that is multiplied with essential matrix
     :return: Rotation and translation matrices
     """
-    U, S, V_T = np.linalg.svd(essential_matrix)
-    W = w_matrix
+    U, S, V_T = np.linalg.svd(E)
 
-    # print("E svd U", U)
-    # print("E svd S", S)
-    # print("E svd U[:, 2]", U[:, 2])
     R = []
     C = []
-    R.append(np.dot(U, np.dot(W, V_T)))
-    R.append(np.dot(U, np.dot(W, V_T)))
-    R.append(np.dot(U, np.dot(W.T, V_T)))
-    R.append(np.dot(U, np.dot(W.T, V_T)))
+
+    # rotation matrices
+    R.append(np.dot(U, np.dot(np.array([[0, -1, 0],
+                  [1,  0, 0],
+                  [0,  0, 1]]), V_T)))
+    R.append(np.dot(U, np.dot(np.array([[0, -1, 0],
+                  [1,  0, 0],
+                  [0,  0, 1]]), V_T)))
+    R.append(np.dot(U, np.dot(np.array([[0, -1, 0],
+                  [1,  0, 0],
+                  [0,  0, 1]]).T, V_T)))
+    R.append(np.dot(U, np.dot(np.array([[0, -1, 0],
+                  [1,  0, 0],
+                  [0,  0, 1]]).T, V_T)))
+
+    #  translation matrices
     C.append(U[:, 2])
     C.append(-U[:, 2])
     C.append(U[:, 2])

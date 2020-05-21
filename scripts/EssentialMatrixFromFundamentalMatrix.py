@@ -3,7 +3,7 @@
 """
 MIT License
 
-Copyright (c) 2018 Aditya Vaishampayan, Amrish Bhaskaran
+Copyright (c) 2020 Aditya Vaishampayan
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -26,7 +26,6 @@ SOFTWARE.
 
 # @file    EssentialMatrixFromFundamentalMatrix.py
 # @Author  Aditya Vaishampayan (adityavaishampayan)
-# @Author  Amrish Baskaran (amrish1222)
 # @copyright  MIT
 # @brief  essential matrix E=K.T*F*K
 
@@ -40,7 +39,7 @@ except BaseException:
     pass
 
 
-def get_essential_matrix(
+def e_from_fundamental(
         fundamental_matrix: float,
         calibration_matrix: float) -> float:
     """
@@ -52,10 +51,6 @@ def get_essential_matrix(
     K = calibration_matrix
     F = fundamental_matrix
 
-    E = np.dot(K.T, np.dot(F, K))
+    U, S, V = np.linalg.svd(np.dot(K.T, np.dot(F, K)))
 
-    U, S, V = np.linalg.svd(E)
-
-    E = np.dot(U, np.dot(np.diag([1, 1, 0]), V))
-
-    return E
+    return (np.dot(U, np.dot(np.diag([1, 1, 0]), V)))
