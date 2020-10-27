@@ -16,7 +16,7 @@ command-not-found==0.3
 controller-manager==0.13.4
 controller-manager-msgs==0.13.4
 controller-manager-tests==0.13.4
-cryptography==1.2.3
+cryptography==3.2
 cycler==0.9.0
 decorator==4.3.2
 defer==1.0.6
